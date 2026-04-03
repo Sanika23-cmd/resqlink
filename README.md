@@ -126,4 +126,4 @@ This repository currently contains the **frontend implementation (Phase 1)** of 
 
 ```bash
 npm install
-npm run dev
+npm start
