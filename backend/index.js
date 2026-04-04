@@ -8,10 +8,7 @@ const app = express();
 const server = http.createServer(app);
 
 const io = new Server(server, {
-  cors: {
-    origin: '*',
-    methods: ['GET', 'POST', 'PATCH', 'DELETE']
-  }
+  cors: { origin: '*', methods: ['GET', 'POST', 'PATCH', 'DELETE'] }
 });
 
 app.use(cors({
@@ -21,7 +18,6 @@ app.use(cors({
 }));
 
 app.use(express.json());
-
 app.set('io', io);
 
 app.use('/api/auth', require('./routes/auth'));
@@ -35,12 +31,30 @@ app.get('/api/health', (req, res) => {
 
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
-  socket.on('disconnect', () => {
-    console.log('Client disconnected:', socket.id);
-  });
+  socket.on('disconnect', () => console.log('Client disconnected:', socket.id));
 });
 
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-  console.log(`ResQLink server running on port ${PORT}`);
-});
+async function autoSeed() {
+  try {
+    const { PrismaClient } = require('@prisma/client');
+    const bcrypt = require('bcryptjs');
+    const prisma = new PrismaClient();
+
+    const existingAdmin = await prisma.user.findUnique({
+      where: { email: 'admin@resqlink.com' }
+    });
+
+    if (!existingAdmin) {
+      console.log('Running auto-seed...');
+
+      const adminHash = await bcrypt.hash('admin123', 10);
+      await prisma.user.create({
+        data: { email: 'admin@resqlink.com', password: adminHash, role: 'admin' }
+      });
+
+      await prisma.incident.createMany({
+        data: [
+          {
+            type: 'flood',
+            description: 'Heavy flooding in Mumbai coastal areas, residents trapped in ground floors.',
+            latitude: 19.076
