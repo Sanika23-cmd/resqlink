@@ -1,6 +1,6 @@
 ResQLink – AI-Powered Urban Disaster Intelligence & Response System
-🧠 Problem Statement
 
+🧠 Problem Statement
 Urban areas frequently face disasters such as floods, fires, earthquakes, and infrastructure failures. Existing systems often suffer from:
 
 ⏳ Delayed reporting and response
@@ -18,6 +18,7 @@ Instant incident reporting
 Smart severity analysis
 Live monitoring through dashboards
 Faster and more informed decision-making
+
 💡 Our Solution
 
 ResQLink is a full-stack disaster response platform that integrates:
@@ -29,6 +30,7 @@ ResQLink is a full-stack disaster response platform that integrates:
 
 It bridges the gap between citizens and emergency responders.
 
+
 🏗️ System Architecture
 Frontend (React)
         ↓
@@ -39,16 +41,20 @@ Database (PostgreSQL via Prisma)
 AI Layer (Google Gemini API)
         ↓
 Realtime Updates (Socket.IO)
+
 🎨 UI/UX Design
 Dark tactical / military-inspired interface
 Fonts:
 Bebas Neue (headings)
 Space Mono (data display)
+
 Features:
 Scanline effects
 Grid layouts
 Noise overlays
 Color-coded severity indicators
+
+
 ⚙️ Tech Stack
 🔹 Frontend
 React.js
@@ -69,6 +75,8 @@ Used for:
 Severity prediction
 Action recommendation
 Fake report detection
+
+
 🖥️ Features
 🔹 User Side
 📍 Geo-tagged incident reporting
