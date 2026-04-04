@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      String   @default("citizen")
+  createdAt DateTime @default(now())
+}
+
+model Incident {
+  id          String   @id @default(uuid())
+  type        String
+  description String
+  latitude    Float
+  longitude   Float
+  severity    String   @default("low")
+  aiAction    String?
+  safeRoute   String?
+  isFake      Boolean  @default(false)
+  fakeScore   Float?   @default(0.0)
+  status      String   @default("open")
+  reportedBy  String   @default("anonymous")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Resource {
+  id        String   @id @default(uuid())
+  type      String
+  name      String
+  latitude  Float
+  longitude Float
+  status    String   @default("available")
+  createdAt DateTime @default(now())
+}
