@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { PrismaClient } = require('@prisma/client');
-const Anthropic = require('@anthropic-ai/sdk');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const prisma = new PrismaClient();
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 router.get('/', async (req, res) => {
   try {
@@ -43,14 +43,11 @@ router.post('/', async (req, res) => {
   let fakeScore = 0.05;
 
   try {
-    console.log('Calling Claude API for triage...');
+    console.log('Calling Gemini API for triage...');
 
-    const triageResp = await client.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 400,
-      messages: [{
-        role: 'user',
-        content: `You are a disaster response AI triage system.
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+    const prompt = `You are a disaster response AI triage system.
 
 Analyze this incident report:
 - Disaster Type: ${type}
@@ -70,14 +67,17 @@ Rules:
 - action must be one clear actionable sentence for responders
 - fakeScore is between 0.0 (definitely real) and 1.0 (definitely fake)
 - safeRoute is a short evacuation suggestion
-- respond with JSON only, no extra text`
-      }]
-    });
+- respond with JSON only, no extra text`;
 
-    const rawText = triageResp.content[0].text.trim();
-    console.log('Claude response:', rawText);
+    const result = await model.generateContent(prompt);
+    const rawText = result.response.text().trim();
+    console.log('Gemini response:', rawText);
 
-    const cleanText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+    const cleanText = rawText
+      .replace(/```json/g, '')
+      .replace(/```/g, '')
+      .trim();
+
     const parsed = JSON.parse(cleanText);
 
     severity = parsed.severity || 'low';
@@ -88,7 +88,7 @@ Rules:
     console.log('AI Triage complete:', { severity, aiAction, fakeScore, isFake });
 
   } catch (e) {
-    console.error('Claude API error:', e.message);
+    console.error('Gemini API error:', e.message);
   }
 
   try {
@@ -127,7 +127,7 @@ router.patch('/:id/status', async (req, res) => {
 
   const validStatuses = ['open', 'in-progress', 'resolved'];
   if (!validStatuses.includes(status)) {
-    return res.status(400).json({ error: 'Invalid status. Must be open, in-progress, or resolved' });
+    return res.status(400).json({ error: 'Invalid status' });
   }
 
   try {
