@@ -96,20 +96,26 @@ Fake report detection
 Real-time frontend-backend communication
 Database-driven architecture
 Scalable modular design
+
+
 🚀 Key Highlights
 ⚡ Real-time updates using Socket.IO
 🤖 AI-powered disaster analysis
 🌍 Live map with dynamic incident plotting
 🔐 Secure authentication system
 ☁️ Cloud-deployed backend (Render)
+
+
 📊 Expected Impact
 Faster emergency response
 Improved disaster awareness
 Reduced misinformation
 Better coordination between users and authorities
+
 👥 Team Members
 Sanika Paranjape
 Aditi Pawar
+
 🚧 Project Status
 ✅ Frontend Completed
 ✅ Backend Integrated
@@ -142,9 +148,12 @@ npm start
 Start Frontend:
 cd frontend
 npm start
+
 🌐 Deployment
 Backend: Render
 Frontend: (Local / Vercel recommended)
+
+
 🎯 Future Enhancements
 🌍 Real map integration (Google Maps / Leaflet)
 📊 Predictive disaster analytics
@@ -152,5 +161,6 @@ Frontend: (Local / Vercel recommended)
 📡 Offline support system
 🔔 Advanced notification system
 💬 Final Note
+
 
 “ResQLink leverages real-time technology and AI to transform disaster response into a faster, smarter, and more coordinated system.
